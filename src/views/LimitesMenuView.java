@@ -46,24 +46,18 @@ public class LimitesMenuView {
         topicsBox.setAlignment(Pos.CENTER);
 
         String[] topics = {
-                "🎯 Evaluación",
                 "📚 Límite de una función",
                 "🔍 Continuidad en un punto",
                 "🧮 Cálculo de límites",
                 "∞ Límites al infinito",
-                "⭐ Límites notables"
+                "⭐ Límites notables",
+                "🎯 Evaluación"
         };
 
         for (String topic : topics) {
             HBox topicItem = UIComponents.createTopicItem(topic);
 
-            if (topic.equals("🎯 Evaluación")) {
-                topicItem.setOnMouseClicked(e -> {
-                    IntroduccionView introView = new IntroduccionView(viewManager);
-                    viewManager.getRoot().getChildren().clear();
-                    viewManager.getRoot().getChildren().add(introView.createView());
-                });
-            } else if (topic.equals("📚 Límite de una función")) {
+            if (topic.equals("📚 Límite de una función")) {
                 topicItem.setOnMouseClicked(e -> {
                     LimiteFuncionView limiteView = new LimiteFuncionView(viewManager);
                     viewManager.getRoot().getChildren().clear();
@@ -92,6 +86,12 @@ public class LimitesMenuView {
                     LimitesNotablesView notablesView = new LimitesNotablesView(viewManager, this);
                     viewManager.getRoot().getChildren().clear();
                     viewManager.getRoot().getChildren().add(notablesView.createView());
+                });
+            } else if (topic.equals("🎯 Evaluación")) {
+                topicItem.setOnMouseClicked(e -> {
+                    IntroduccionView introView = new IntroduccionView(viewManager);
+                    viewManager.getRoot().getChildren().clear();
+                    viewManager.getRoot().getChildren().add(introView.createView());
                 });
             }
             topicsBox.getChildren().add(topicItem);
