@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    /*{
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Main",
+      "projectName": "JavaApplication11_43fc9941"
+    },*/
+    {
+      "type": "java",
+      "name": "JavaFX Run",
+      "request": "launch",
+      "mainClass": "MatiMate",
+      "vmArgs": "--module-path \"C:/Users/DELL/Downloads/openjfx-17.0.17_windows-x64_bin-sdk/javafx-sdk-17.0.17/lib\" --add-modules javafx.controls,javafx.fxml"
+    }
+  ]
+}

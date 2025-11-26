@@ -1,0 +1,4 @@
+admin@matimate.com|admin123|Administrador|+1111111111|100
+edman.lara@gmail.com|edmanpaco|edman|edmanpaco|0
+juan.perez@ejemplo.com|654321|Juan P�rez|+1234567890|80
+maria.garcia@ejemplo.com|123456|Maria Garcia|+9876543210|95
