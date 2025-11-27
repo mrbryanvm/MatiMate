@@ -71,12 +71,11 @@ public class DefinicionLimitesView {
 
         VBox definicionSection = createDefinicionSection();
         VBox videoSection = createVideoSection();
-        VBox limitesLateralesSection = createLimitesLateralesSection();
         VBox cuestionarioSection = createCuestionarioSection();
 
         mainContent.getChildren().addAll(
                 conceptosSection, definicionSection, videoSection,
-                limitesLateralesSection, cuestionarioSection);
+                cuestionarioSection);
 
         scrollContent.setContent(mainContent);
         contentLayout.getChildren().addAll(header, scrollContent);
@@ -158,50 +157,6 @@ public class DefinicionLimitesView {
         });
 
         section.getChildren().addAll(title, videoContainer);
-        return section;
-    }
-
-    private VBox createLimitesLateralesSection() {
-        VBox section = new VBox(15);
-        section.setStyle("-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-width: 0 0 1 0;");
-        section.setPadding(new Insets(25, 25, 25, 25));
-
-        Label title = new Label("Límites Laterales");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-        title.setTextFill(AppConstants.TITLE_COLOR);
-
-        VBox formulasBox = new VBox(10);
-        formulasBox.setAlignment(Pos.CENTER_LEFT);
-
-        HBox formulaDerecha = new HBox(10);
-        formulaDerecha.setAlignment(Pos.CENTER_LEFT);
-
-        Label y1Label = new Label("y₁ f(x)");
-        y1Label.setFont(Font.font("Segoe UI", 14));
-        y1Label.setTextFill(AppConstants.TEXT_COLOR);
-
-        Text formulaDerechaText = new Text("lim(x→a⁺) f(x) = L");
-        formulaDerechaText.setFont(Font.font("Cambria Math", FontWeight.BOLD, 16));
-        formulaDerechaText.setFill(AppConstants.TITLE_COLOR);
-
-        formulaDerecha.getChildren().addAll(y1Label, formulaDerechaText);
-
-        HBox formulaIzquierda = new HBox(10);
-        formulaIzquierda.setAlignment(Pos.CENTER_LEFT);
-
-        Label y2Label = new Label("y₂ f(x)");
-        y2Label.setFont(Font.font("Segoe UI", 14));
-        y2Label.setTextFill(AppConstants.TEXT_COLOR);
-
-        Text formulaIzquierdaText = new Text("lim(x→a⁻) f(x) = L");
-        formulaIzquierdaText.setFont(Font.font("Cambria Math", FontWeight.BOLD, 16));
-        formulaIzquierdaText.setFill(AppConstants.TITLE_COLOR);
-
-        formulaIzquierda.getChildren().addAll(y2Label, formulaIzquierdaText);
-
-        formulasBox.getChildren().addAll(formulaDerecha, formulaIzquierda);
-
-        section.getChildren().addAll(title, formulasBox);
         return section;
     }
 
