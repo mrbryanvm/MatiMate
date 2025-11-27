@@ -65,14 +65,12 @@ public class PropiedadesLimitesView {
         mainContent.setBackground(
                 new Background(new BackgroundFill(AppConstants.BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        VBox conceptosSection = createConceptosSection();
-
         VBox videoSection = createVideoSection();
         VBox propiedadesSection = createContenidoPropiedades();
         VBox cuestionarioSection = createCuestionarioSection();
 
         mainContent.getChildren().addAll(
-                conceptosSection, videoSection, propiedadesSection, cuestionarioSection);
+                videoSection, propiedadesSection, cuestionarioSection);
 
         scrollContent.setContent(mainContent);
         contentLayout.getChildren().addAll(header, scrollContent);
@@ -169,15 +167,28 @@ public class PropiedadesLimitesView {
 
         VBox titlesBox = new VBox(2);
 
-        Label mainTitle = new Label("PROPIEDADES");
+        Label mainTitle = new Label("PRÁCTICA");
         mainTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         mainTitle.setTextFill(AppConstants.TITLE_COLOR);
 
-        Label subTitle = new Label("LÍMITES");
+        Label subTitle = new Label("Ejercicios y Evaluación");
         subTitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
         subTitle.setTextFill(AppConstants.LIGHT_TEXT);
 
         titlesBox.getChildren().addAll(mainTitle, subTitle);
+        HBox.setHgrow(titlesBox, Priority.ALWAYS);
+
+        HBox buttonsBox = new HBox(15);
+        buttonsBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Button ejerciciosBtn = new Button("Serie de ejercicios");
+        ejerciciosBtn.setStyle("-fx-background-color: #4A5568; -fx-text-fill: white; -fx-font-weight: bold; " +
+                "-fx-background-radius: 20; -fx-padding: 12 25; -fx-font-size: 14; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);");
+        ejerciciosBtn.setOnAction(e -> {
+            EjerciciosPropiedadesView ejerciciosView = new EjerciciosPropiedadesView(viewManager, this);
+            ejerciciosView.show();
+        });
 
         Button resolverBtn = new Button("Resolver Cuestionario");
         resolverBtn.setStyle("-fx-background-color: #3EB566; -fx-text-fill: white; -fx-font-weight: bold; " +
@@ -189,8 +200,8 @@ public class PropiedadesLimitesView {
             viewManager.getRoot().getChildren().add(cuestionarioView.createView());
         });
 
-        HBox.setHgrow(titlesBox, Priority.ALWAYS);
-        headerBox.getChildren().addAll(titlesBox, resolverBtn);
+        buttonsBox.getChildren().addAll(ejerciciosBtn, resolverBtn);
+        headerBox.getChildren().addAll(titlesBox, buttonsBox);
 
         section.getChildren().add(headerBox);
         return section;
@@ -206,43 +217,5 @@ public class PropiedadesLimitesView {
     public void show() {
         viewManager.getRoot().getChildren().clear();
         viewManager.getRoot().getChildren().add(createView());
-    }
-
-    private VBox createConceptosSection() {
-        VBox section = new VBox(15);
-        section.setStyle("-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-width: 0 0 1 0;");
-        section.setPadding(new Insets(20, 25, 20, 25));
-        Label titleLabel = new Label("Conceptos");
-        titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-        titleLabel.setTextFill(AppConstants.TITLE_COLOR);
-        titleLabel.setPadding(new Insets(0, 0, 15, 0));
-        HBox itemBox = new HBox(10);
-        itemBox.setAlignment(Pos.CENTER_LEFT);
-        itemBox.setStyle("-fx-cursor: hand;");
-        itemBox.setPadding(new Insets(8, 0, 8, 0));
-        javafx.scene.shape.Circle bullet = new javafx.scene.shape.Circle(4);
-        bullet.setFill(AppConstants.PRIMARY_COLOR);
-        Label itemLabel = new Label("Serie de ejercicios");
-        itemLabel.setFont(Font.font("Segoe UI", 14));
-        itemLabel.setTextFill(AppConstants.TEXT_COLOR);
-        Text arrow = new Text("→");
-        arrow.setFont(Font.font("Segoe UI", 14));
-        arrow.setFill(AppConstants.LIGHT_TEXT);
-        HBox.setHgrow(itemLabel, Priority.ALWAYS);
-        itemBox.getChildren().addAll(bullet, itemLabel, arrow);
-        itemBox.setOnMouseEntered(e -> {
-            itemBox.setStyle("-fx-background-color: #F7FAFC; -fx-cursor: hand; -fx-padding: 8 5;");
-            arrow.setFill(AppConstants.PRIMARY_COLOR);
-        });
-        itemBox.setOnMouseExited(e -> {
-            itemBox.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 8 0;");
-            arrow.setFill(AppConstants.LIGHT_TEXT);
-        });
-        itemBox.setOnMouseClicked(e -> {
-            EjerciciosPropiedadesView ejerciciosView = new EjerciciosPropiedadesView(viewManager, this);
-            ejerciciosView.show();
-        });
-        section.getChildren().addAll(titleLabel, itemBox);
-        return section;
     }
 }
