@@ -52,9 +52,46 @@ public class FuncionesMenuView {
                 "🎯 Evaluación"
         };
 
-        for (String topic : topics) {
+        for (int i = 0; i < topics.length; i++) {
+            String topic = topics[i];
             HBox topicItem = UIComponents.createTopicItem(topic);
-            topicItem.setOnMouseClicked(e -> viewManager.showComingSoon(topic));
+
+            final int index = i;
+            topicItem.setOnMouseClicked(e -> {
+                switch (index) {
+                    case 0:
+                        views.funciones.DefinicionFuncionView view0 = new views.funciones.DefinicionFuncionView(
+                                viewManager, this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view0.createView());
+                        break;
+                    case 1:
+                        views.funciones.TiposFuncionesView view1 = new views.funciones.TiposFuncionesView(viewManager,
+                                this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view1.createView());
+                        break;
+                    case 2:
+                        views.funciones.DominioRangoView view2 = new views.funciones.DominioRangoView(viewManager,
+                                this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view2.createView());
+                        break;
+                    case 3:
+                        views.funciones.ComposicionFuncionesView view3 = new views.funciones.ComposicionFuncionesView(
+                                viewManager, this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view3.createView());
+                        break;
+                    case 4:
+                        views.funciones.EvaluacionFuncionesView view4 = new views.funciones.EvaluacionFuncionesView(
+                                viewManager, this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view4.createView());
+                        break;
+                }
+            });
+
             topicsBox.getChildren().add(topicItem);
         }
 
@@ -67,6 +104,8 @@ public class FuncionesMenuView {
                 "-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;");
 
         funcionesLayout.getChildren().addAll(header, scrollPane, backBtn);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        funcionesLayout.setAlignment(Pos.TOP_CENTER);
 
         return funcionesLayout;
     }

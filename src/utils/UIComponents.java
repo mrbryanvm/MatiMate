@@ -371,4 +371,45 @@ public class UIComponents {
         section.getChildren().addAll(titleLabel, itemsBox);
         return section;
     }
+
+    // Crear header común
+    public static VBox createHeader(String title, String subtitle) {
+        VBox header = new VBox(5);
+        header.setAlignment(Pos.CENTER);
+        header.setPadding(new Insets(0, 0, 20, 0));
+
+        Text titleText = new Text(title);
+        titleText.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
+        titleText.setFill(AppConstants.TITLE_COLOR);
+
+        Text subtitleText = new Text(subtitle);
+        subtitleText.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 16));
+        subtitleText.setFill(AppConstants.LIGHT_TEXT);
+
+        header.getChildren().addAll(titleText, subtitleText);
+        return header;
+    }
+
+    // Crear caja de contenido
+    public static VBox createContentBox(String title) {
+        VBox box = new VBox(15);
+        box.setPadding(new Insets(25));
+        box.setStyle(
+                "-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 3);");
+
+        Label titleLabel = new Label(title);
+        titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
+        titleLabel.setTextFill(AppConstants.PRIMARY_COLOR);
+
+        box.getChildren().add(titleLabel);
+        return box;
+    }
+
+    // Botón de verificar respuesta
+    public static void addCheckButton(VBox container, Runnable action) {
+        Button checkBtn = createPrimaryButton("✅ Verificar Respuestas");
+        checkBtn.setMaxWidth(Double.MAX_VALUE);
+        checkBtn.setOnAction(e -> action.run());
+        container.getChildren().add(checkBtn);
+    }
 }

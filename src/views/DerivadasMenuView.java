@@ -53,9 +53,51 @@ public class DerivadasMenuView {
                 "🎯 Evaluación"
         };
 
-        for (String topic : topics) {
+        for (int i = 0; i < topics.length; i++) {
+            String topic = topics[i];
             HBox topicItem = UIComponents.createTopicItem(topic);
-            topicItem.setOnMouseClicked(e -> viewManager.showComingSoon(topic));
+
+            final int index = i;
+            topicItem.setOnMouseClicked(e -> {
+                switch (index) {
+                    case 0:
+                        views.derivadas.DefinicionDerivadaView view0 = new views.derivadas.DefinicionDerivadaView(
+                                viewManager, this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view0.createView());
+                        break;
+                    case 1:
+                        views.derivadas.ReglasDerivacionView view1 = new views.derivadas.ReglasDerivacionView(
+                                viewManager, this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view1.createView());
+                        break;
+                    case 2:
+                        views.derivadas.ReglaCadenaView view2 = new views.derivadas.ReglaCadenaView(viewManager, this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view2.createView());
+                        break;
+                    case 3:
+                        views.derivadas.OrdenSuperiorView view3 = new views.derivadas.OrdenSuperiorView(viewManager,
+                                this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view3.createView());
+                        break;
+                    case 4:
+                        views.derivadas.AplicacionesDerivadaView view4 = new views.derivadas.AplicacionesDerivadaView(
+                                viewManager, this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view4.createView());
+                        break;
+                    case 5:
+                        views.derivadas.EvaluacionDerivadasView view5 = new views.derivadas.EvaluacionDerivadasView(
+                                viewManager, this);
+                        viewManager.getRoot().getChildren().clear();
+                        viewManager.getRoot().getChildren().add(view5.createView());
+                        break;
+                }
+            });
+
             topicsBox.getChildren().add(topicItem);
         }
 
@@ -68,6 +110,8 @@ public class DerivadasMenuView {
                 "-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;");
 
         derivadasLayout.getChildren().addAll(header, scrollPane, backBtn);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        derivadasLayout.setAlignment(Pos.TOP_CENTER);
 
         return derivadasLayout;
     }
