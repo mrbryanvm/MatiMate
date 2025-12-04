@@ -16,18 +16,8 @@ import javafx.stage.Stage;
 import java.awt.Desktop;
 import java.net.URI;
 
-/**
- * Utility class for opening YouTube videos in the system's default browser
- */
 public class YouTubePlayer {
 
-    /**
-     * Opens a YouTube video in the system's default web browser
-     * 
-     * @param videoUrl    The full YouTube URL
-     * @param title       The title to display
-     * @param description The description to display
-     */
     public static void playVideo(String videoUrl, String title, String description) {
         try {
             if (!Desktop.isDesktopSupported()) {
@@ -49,6 +39,16 @@ public class YouTubePlayer {
             showError("Error al abrir el video:\n" + e.getMessage() + "\n\nURL: " + videoUrl);
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Opens a YouTube video in the system's default web browser with a default
+     * title
+     * 
+     * @param videoUrl The full YouTube URL
+     */
+    public static void playVideo(String videoUrl) {
+        playVideo(videoUrl, "Video Educativo", "Se ha abierto el video en tu navegador predeterminado.");
     }
 
     private static void showConfirmation(String title, String description) {
