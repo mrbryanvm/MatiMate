@@ -105,7 +105,7 @@ public class ExerciseSeriesView {
 
         card.getChildren().addAll(problemLabel, problemText, sep, solutionLabel, solutionArea);
 
-        // Navigation Buttons
+        // Botones de Navegación
         HBox navButtons = new HBox(20);
         navButtons.setAlignment(Pos.CENTER);
 
@@ -127,7 +127,7 @@ public class ExerciseSeriesView {
         navButtons.getChildren().add(nextButton);
         mainContent.getChildren().addAll(card, navButtons);
 
-        // Menu Button
+        // Botón Menú
         Button menuButton = new Button("Volver al Menú");
         menuButton.setStyle("-fx-background-color: #718096; -fx-text-fill: white; -fx-font-weight: bold; " +
                 "-fx-background-radius: 20; -fx-padding: 10 20;");

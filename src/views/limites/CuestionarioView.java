@@ -18,7 +18,8 @@ public class CuestionarioView {
     private int currentQuestionIndex = 0;
     private String[][] questions;
 
-    // Track if current question was answered wrongly at least once
+    // Seguimiento si la pregunta actual fue respondida incorrectamente al menos una
+    // vez
     private boolean answeredWronglyOnce = false;
 
     public CuestionarioView(ViewManager viewManager) {
@@ -68,12 +69,12 @@ public class CuestionarioView {
         headerLayout.setCenter(headerContent);
         header.getChildren().add(headerLayout);
 
-        // Main Content
+        // Contenido principal
         VBox mainContent = new VBox(30);
         mainContent.setPadding(new Insets(40));
         mainContent.setAlignment(Pos.TOP_CENTER);
 
-        // Question Card
+        // Tarjeta de pregunta
         VBox card = new VBox(20);
         card.setStyle("-fx-background-color: white; -fx-background-radius: 15; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);");
@@ -138,7 +139,7 @@ public class CuestionarioView {
 
                 int selectedIndex = (int) selected.getUserData();
                 if (selectedIndex == correctIndex) {
-                    // Only add points if never answered wrongly
+                    // Solo agregra puntos si no se respondio mal
                     if (!answeredWronglyOnce) {
                         LimitsContext.getInstance().addScore(pointsValue);
                     }
@@ -164,7 +165,7 @@ public class CuestionarioView {
         }
         mainContent.getChildren().add(card);
 
-        // Menu Button
+        // Boton menu
         Button menuButton = new Button("Volver al Menú");
         menuButton.setStyle("-fx-background-color: #718096; -fx-text-fill: white; -fx-font-weight: bold; " +
                 "-fx-background-radius: 20; -fx-padding: 10 20;");

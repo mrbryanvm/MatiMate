@@ -41,12 +41,6 @@ public class YouTubePlayer {
         }
     }
 
-    /**
-     * Opens a YouTube video in the system's default web browser with a default
-     * title
-     * 
-     * @param videoUrl The full YouTube URL
-     */
     public static void playVideo(String videoUrl) {
         playVideo(videoUrl, "Video Educativo", "Se ha abierto el video en tu navegador predeterminado.");
     }

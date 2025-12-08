@@ -26,7 +26,7 @@ public class LimitsFlowManager {
             LimitsContext.getInstance().startTopic(Topic.PROPIEDADES);
             showTheory();
         } else {
-            // Finish flow
+            // Finalizar flujo
             finishFlow();
         }
     }
@@ -67,7 +67,7 @@ public class LimitsFlowManager {
     }
 
     private void finishFlow() {
-        // Save score to global user
+        // Guardar puntuación en el usuario global
         int finalContextScore = LimitsContext.getInstance().getCurrentScore();
         viewManager.updateUserScore(finalContextScore);
         viewManager.showMainMenu();

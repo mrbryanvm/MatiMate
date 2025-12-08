@@ -138,14 +138,14 @@ public class TheoryQuestionView {
 
                 int selectedIndex = (int) selected.getUserData();
                 if (selectedIndex == correctIndex) {
-                    // Only add points if never answered wrongly
+                    // Solo agrega puntuación si nunca respondió mal
                     if (!answeredWronglyOnce) {
                         LimitsContext.getInstance().addScore(pointsValue);
                     }
 
                     if (currentQuestionIndex < questions.length - 1) {
                         currentQuestionIndex++;
-                        answeredWronglyOnce = false; // Reset for next question
+                        answeredWronglyOnce = false; // Resetear para la siguiente pregunta
                         show();
                     } else {
                         flowManager.showVideo();

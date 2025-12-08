@@ -2,7 +2,7 @@ package utils;
 
 public class LimitsContentProvider {
 
-        // --- THEORY ---
+        // --- TEORÍA ---
         public static String getTheoryTitle(LimitsContext.Topic topic) {
                 switch (topic) {
                         case DEFINICION:
@@ -73,11 +73,11 @@ public class LimitsContentProvider {
                 }
         }
 
-        // --- THEORY QUESTIONS ---
-        // Returns: {Question, Option1, Option2, Option3, CorrectIndex, Points}
+        // --- PREGUNTAS DE TEORÍA ---
+        // Returns: {Pregunta, Opción1, Opción2, Opción3, IndiceCorrecto, Puntos}
         public static String[][] getTheoryQuestions(LimitsContext.Topic topic) {
                 switch (topic) {
-                        case DEFINICION: // Total 5 pts (1 each)
+                        case DEFINICION: // Total 5 pts (1 cada uno)
                                 return new String[][] {
                                                 { "El límite L es el valor al que se acerca f(x) cuando x se acerca a:",
                                                                 "Infinito", "L", "a", "2", "1" },
@@ -93,7 +93,7 @@ public class LimitsContentProvider {
                                                 { "La notación lim(x→a) se lee:", "Límite de f(x) cuando x tiende a a",
                                                                 "f(x) dividido por x-a", "x aproximado a a", "0", "1" }
                                 };
-                        case LATERALES: // Total 5 pts (1 each)
+                        case LATERALES: // Total 5 pts (1 cada uno)
                                 return new String[][] {
                                                 { "El límite lateral por la izquierda se denota con:", "x -> a⁺",
                                                                 "x -> a⁻", "x -> -a", "1", "1" },
@@ -108,7 +108,7 @@ public class LimitsContentProvider {
                                                 { "Los límites laterales evalúan la función en:", "El punto exacto",
                                                                 "Valores muy cercanos", "El infinito", "1", "1" }
                                 };
-                        case PROPIEDADES: // Total 5 pts (1 each)
+                        case PROPIEDADES: // Total 5 pts (1 cada uno)
                                 return new String[][] {
                                                 { "El límite de una suma es:", "La suma de los límites",
                                                                 "El producto de los límites", "Cero", "0", "1" },
@@ -144,10 +144,10 @@ public class LimitsContentProvider {
         }
 
         // --- QUIZ (CUESTIONARIO) ---
-        // Returns: {Question, Option1, Option2, Option3, CorrectIndex, Points}
+        // Returns: {Pregunta, Opción1, Opción2, Opción3, IndiceCorrecto, Puntos}
         public static String[][] getQuizQuestions(LimitsContext.Topic topic) {
                 switch (topic) {
-                        case DEFINICION: // Total 10 pts (2 each)
+                        case DEFINICION: // Total 10 pts (2 cada uno)
                                 return new String[][] {
                                                 { "Si x se acerca a 2, x puede tomar el valor:", "1.999", "2", "3", "0",
                                                                 "2" },
@@ -160,7 +160,7 @@ public class LimitsContentProvider {
                                                 { "¿El límite evalúa lo que pasa EXACTAMENTE en x=a?", "Sí", "No",
                                                                 "A veces", "1", "2" }
                                 };
-                        case LATERALES: // Total 10 pts (2 each)
+                        case LATERALES: // Total 10 pts (2 cada uno)
                                 return new String[][] {
                                                 { "Si lim(x->2⁻) = 3 y lim(x->2⁺) = 4, el límite:", "Es 3.5", "Es 7",
                                                                 "No existe", "2", "2" },
@@ -171,7 +171,7 @@ public class LimitsContentProvider {
                                                 { "Si una función tiene un salto en x=a, el límite:", "Es infinito",
                                                                 "Es cero", "No existe", "2", "2" }
                                 };
-                        case PROPIEDADES: // Total 10 pts (2 each)
+                        case PROPIEDADES: // Total 10 pts (2 cada uno)
                                 return new String[][] {
                                                 { "lim(x->1) (3x + 2) =", "3", "5", "1", "1", "2" },
                                                 { "lim(x->2) (x^2) =", "2", "4", "0", "1", "2" },
@@ -186,7 +186,7 @@ public class LimitsContentProvider {
         }
 
         // --- EXERCISES (SERIES) ---
-        // Returns: {Title, Problem, Solution}
+        // Returns: {Título, Problema, Solución}
         public static String[][] getExercises(LimitsContext.Topic topic) {
                 switch (topic) {
                         case DEFINICION:
@@ -215,9 +215,9 @@ public class LimitsContentProvider {
                 }
         }
 
-        // --- PRACTICE ---
-        // Returns: Array of Steps -> {Question, Opt1, Opt2, Opt3, Opt4, CorrectIndex,
-        // Points}
+        // --- PRÁCTICA ---
+        // Returns: Array of Steps -> {Pregunta, Opción1, Opción2, Opción3, Opción4,
+        // IndiceCorrecto, Puntos}
         public static String[][][] getPracticeSteps(LimitsContext.Topic topic) {
                 switch (topic) {
                         case DEFINICION: // Needs 18 pts. 6 steps. 3 pts each.
@@ -240,11 +240,7 @@ public class LimitsContentProvider {
                                                                 { "Paso 3: Resultado:", "1", "2", "4", "16", "1", "3" }
                                                 }
                                 }; // Total 18 pts. Flow Total: 5+10+18 = 33.
-                        case LATERALES: // Needs 18 pts. 7 steps. Questions: 3,3,3,2 (11) + 3,2,2 (7)? No good.
-                                // Revisit step breakdown.
-                                // Ex 1: 4 steps. Ex 2: 3 steps.
-                                // Let's do 2.5 pts each? No integers.
-                                // Let's do 3, 2, 3, 2 for Ex 1 (10 pts). 3, 2, 3 for Ex 2 (8 pts). Total 18.
+                        case LATERALES: // Needs 18 pts.
                                 return new String[][][] {
                                                 { // Ex 1 (10 pts)
                                                                 { "f(x)={x si x<2, 4 si x>2}. Paso 1: Lim Izquierdo (x<2):",

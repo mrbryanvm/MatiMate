@@ -58,7 +58,7 @@ public class LimiteFuncionView {
                 headerLayout.setCenter(headerContent);
                 header.getChildren().add(headerLayout);
 
-                // Main Content Scroll
+                // Contenido Principal Scroll
                 ScrollPane scrollContent = new ScrollPane();
                 scrollContent.setFitToWidth(true);
                 scrollContent.setStyle("-fx-background: transparent; -fx-background-color: transparent; " +
@@ -70,28 +70,28 @@ public class LimiteFuncionView {
                                 new BackgroundFill(AppConstants.BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
                 mainContent.setAlignment(Pos.TOP_CENTER); // Center card
 
-                // Theory Card
+                // Tarjeta de Teoría
                 VBox section = new VBox(15);
                 section.setStyle("-fx-background-color: white; -fx-background-radius: 10; " +
                                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 5, 0, 0, 2);");
                 section.setPadding(new Insets(30)); // Generous padding
-                section.setMaxWidth(800); // Limit width for readability
+                section.setMaxWidth(800); // Ancho máximo para la legibilidad
 
                 Label theoryTitle = new Label(topicTitle);
-                theoryTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 22)); // Larger title
+                theoryTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 22)); // Título más grande
                 theoryTitle.setTextFill(AppConstants.TITLE_COLOR);
                 theoryTitle.setWrapText(true);
 
                 Label contentLabel = new Label(topicContent);
-                contentLabel.setFont(Font.font("Segoe UI", 16)); // Readable font size
+                contentLabel.setFont(Font.font("Segoe UI", 16)); // Tamaño de fuente legible
                 contentLabel.setTextFill(AppConstants.TEXT_COLOR);
-                contentLabel.setWrapText(true); // Allow text to wrap
-                contentLabel.setMaxWidth(Double.MAX_VALUE); // Expand to container width
+                contentLabel.setWrapText(true); // Permitir que el texto se envuelva
+                contentLabel.setMaxWidth(Double.MAX_VALUE); // Expandir al ancho del contenedor
 
                 section.getChildren().addAll(theoryTitle, contentLabel);
                 mainContent.getChildren().add(section);
 
-                // Next Button
+                // Botón Siguiente
                 Button nextButton = new Button("Siguiente →");
                 nextButton.setStyle("-fx-background-color: " + AppConstants.PRIMARY_COLOR_HEX
                                 + "; -fx-text-fill: white; " +
@@ -107,7 +107,7 @@ public class LimiteFuncionView {
                 mainContent.getChildren().add(buttonContainer);
 
                 scrollContent.setContent(mainContent);
-                VBox.setVgrow(scrollContent, Priority.ALWAYS); // Ensure scroll pane grows
+                VBox.setVgrow(scrollContent, Priority.ALWAYS); // Permitir que el panel de desplazamiento crezca
 
                 contentLayout.getChildren().addAll(header, scrollContent);
 

@@ -20,8 +20,9 @@ public class PracticeView {
     private int currentStepIndex = 0;
     private String[][][] practiceData;
 
-    // Track if current step was answered wrongly at least once (to show in stats as
-    // incorrect initially)
+    // Rastrear si el paso actual fue respondido incorrectamente al menos una vez
+    // (para mostrar en las estadísticas como
+    // incorrecto inicialmente)
     private boolean currentStepAnsweredWrongly = false;
 
     public PracticeView(ViewManager viewManager) {
@@ -76,7 +77,7 @@ public class PracticeView {
         headerLayout.setCenter(headerContent);
         header.getChildren().add(headerLayout);
 
-        // Main Content
+        // Contenido Principal
         VBox mainContent = new VBox(30);
         mainContent.setPadding(new Insets(40));
         mainContent.setAlignment(Pos.TOP_CENTER);
@@ -88,7 +89,7 @@ public class PracticeView {
             return contentLayout;
         }
 
-        // Question Card
+        // Tarjeta de Pregunta
         VBox card = new VBox(20);
         card.setStyle("-fx-background-color: white; -fx-background-radius: 15; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);");
@@ -98,7 +99,7 @@ public class PracticeView {
         String[] stepData = practiceData[currentExerciseIndex][currentStepIndex];
         String questionText = stepData[0];
         int correctIndex = Integer.parseInt(stepData[5]);
-        int pointsValue = Integer.parseInt(stepData[6]); // Explicit points
+        int pointsValue = Integer.parseInt(stepData[6]); // Puntos explícitos
 
         HBox titleBox = new HBox(10);
         titleBox.setAlignment(Pos.CENTER_LEFT);
@@ -152,14 +153,14 @@ public class PracticeView {
 
             if (selectedIndex == correctIndex) {
                 if (!currentStepAnsweredWrongly) {
-                    // Correct on first try
+                    // Correcto en la primera vez
                     LimitsContext.getInstance().addScore(pointsValue);
                     LimitsContext.getInstance().addPracticeAnswer(
                             new UserAnswer(questionText, selectedText, correctText, true, pointsValue));
                 } else {
-                    // Was wrong before, now correct.
-                    // IMPORTANT: We do NOT record a new "Correct" answer for stats if we already
-                    // recorded a wrong one.
+                    // Fue incorrecto antes, ahora correcto.
+                    // IMPORTANT: No registramos un nuevo "Correcto" para las estadísticas si ya
+                    // registramos un incorrecto.
                 }
 
                 if (currentStepIndex < practiceData[currentExerciseIndex].length - 1) {
@@ -172,16 +173,16 @@ public class PracticeView {
                     currentStepAnsweredWrongly = false;
                     show();
                 } else {
-                    // Finished all exercises -> Statistics
+                    // Terminó todos los ejercicios -> Estadísticas
                     flowManager.showStatistics();
                 }
             } else {
-                // Incorrect
+                // Incorrecto
                 feedbackLabel.setText("Respuesta incorrecta (-1 pto). Inténtalo de nuevo.");
                 feedbackLabel.setTextFill(javafx.scene.paint.Color.RED);
 
                 if (!currentStepAnsweredWrongly) {
-                    // First wrong attempt: penalize and record
+                    // Primera respuesta incorrecta: penalizar y registrar
                     LimitsContext.getInstance().penalize();
                     LimitsContext.getInstance().addPracticeAnswer(
                             new UserAnswer(questionText, selectedText, correctText, false, -1));
@@ -193,7 +194,7 @@ public class PracticeView {
         card.getChildren().addAll(titleBox, optionsBox, feedbackLabel, checkButton);
         mainContent.getChildren().add(card);
 
-        // Menu Button
+        // Botón Menú
         Button menuButton = new Button("Volver al Menú");
         menuButton.setStyle("-fx-background-color: #718096; -fx-text-fill: white; -fx-font-weight: bold; " +
                 "-fx-background-radius: 20; -fx-padding: 10 20;");

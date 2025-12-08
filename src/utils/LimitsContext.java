@@ -32,13 +32,6 @@ public class LimitsContext {
     private int currentScore;
     private List<UserAnswer> currentPracticeAnswers;
 
-    // We need to track if the current question (in any view) was already answered
-    // incorrectly to prevent adding positive points on 2nd try.
-    // However, the views manage the index and flow. It is simpler if specific views
-    // manage the "first try" boolean locally for their current question.
-    // EXCEPT for StatisticsView which needs the answers list.
-    // And global score.
-
     private LimitsContext() {
         this.currentTopic = Topic.DEFINICION;
         this.currentScore = 0;

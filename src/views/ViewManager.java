@@ -46,7 +46,7 @@ public class ViewManager {
         if (currentUser != null) {
             int newScore = currentUser.getScore() + addedPoints;
             currentUser.setScore(newScore);
-            // PERSIST SCORE TO STORAGE
+            // PERSISTE PUNTAJE
             userManager.updateUser(currentUser);
             // Refresh main menu with new score
             mainMenuView = new MainMenuView(this, currentUser.getNombre(), newScore);

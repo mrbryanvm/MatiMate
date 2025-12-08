@@ -83,12 +83,12 @@ public class StatisticsView {
             yourLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #718096;");
             Label yourVal = new Label(ans.selectedOption);
             yourVal.setWrapText(true);
-            // Assuming max width for wrapping text in table-like structure
+            // Asumiendo ancho máximo para el ajuste de texto en una estructura tipo tabla
             yourVal.setMaxWidth(200);
             yourVal.setStyle("-fx-font-weight: bold; -fx-text-fill: " + (ans.isCorrect ? "green" : "red") + ";");
             yourAns.getChildren().addAll(yourLabel, yourVal);
 
-            // Correct Answer
+            // Respuesta Correcta
             VBox correctAns = new VBox(5);
             Label correctLabel = new Label("Correcta:");
             correctLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #718096;");
@@ -98,7 +98,7 @@ public class StatisticsView {
             correctVal.setStyle("-fx-font-weight: bold; -fx-text-fill: green;");
             correctAns.getChildren().addAll(correctLabel, correctVal);
 
-            // Points
+            // Puntos
             VBox pointsBox = new VBox(5);
             Label pointsLabel = new Label("Puntos:");
             pointsLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #718096;");
@@ -114,7 +114,7 @@ public class StatisticsView {
 
         mainContent.getChildren().add(statsBox);
 
-        // Next Topic Button
+        // Botón Siguiente Tema
         LimitsContext.Topic current = LimitsContext.getInstance().getCurrentTopic();
         String nextButtonText = (current == LimitsContext.Topic.PROPIEDADES) ? "Finalizar y Ver Ranking"
                 : "Siguiente Tema";

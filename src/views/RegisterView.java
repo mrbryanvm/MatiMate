@@ -27,7 +27,6 @@ public class RegisterView {
         HBox mainLayout = new HBox();
         mainLayout.setAlignment(Pos.CENTER);
 
-        // Left Side - Branding
         VBox brandingBox = new VBox(20);
         brandingBox.setAlignment(Pos.CENTER);
         brandingBox.setPrefWidth(500);
