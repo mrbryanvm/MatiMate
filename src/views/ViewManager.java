@@ -46,6 +46,8 @@ public class ViewManager {
         if (currentUser != null) {
             int newScore = currentUser.getScore() + addedPoints;
             currentUser.setScore(newScore);
+            // PERSIST SCORE TO STORAGE
+            userManager.updateUser(currentUser);
             // Refresh main menu with new score
             mainMenuView = new MainMenuView(this, currentUser.getNombre(), newScore);
         }
@@ -72,6 +74,12 @@ public class ViewManager {
     public void showMainMenu() {
         root.getChildren().clear();
         root.getChildren().add(mainMenuView.createView());
+    }
+
+    public void showRanking() {
+        RankingView rankingView = new RankingView(this);
+        root.getChildren().clear();
+        root.getChildren().add(rankingView.createView());
     }
 
     public void updateView(javafx.scene.layout.Pane view) {

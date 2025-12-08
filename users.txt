@@ -1,4 +1,4 @@
-admin@matimate.com|admin123|Administrador|+1111111111|100
-edman@gmail.com|edman|Edman|77654321|0
-maria@gmail.com|maria|Maria|77654321|0
-mery@gmail.com|mery|Mery|77654321|0
+edman|edman|Edman|77654321|41
+admin|admin|Administrador|77654321|0
+maria|maria|Maria|77654321|0
+mery|mery|Mery|77654321|0

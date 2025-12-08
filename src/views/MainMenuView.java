@@ -47,9 +47,10 @@ public class MainMenuView {
                 welcomeText.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
                 welcomeText.setFill(AppConstants.TEXT_COLOR);
 
-                Text rankingText = new Text("🏆 Ranking: " + totalScore + " pts");
-                rankingText.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
-                rankingText.setFill(AppConstants.BUTTON_COLOR);
+                Button rankingBtn = UIComponents.createSmallButton("🏆 Ranking: " + totalScore + " pts");
+                rankingBtn.setStyle(
+                                "-fx-background-color: #FEFCBF; -fx-text-fill: #975A16; -fx-font-weight: bold; -fx-font-size: 14; -fx-background-radius: 20; -fx-cursor: hand;");
+                rankingBtn.setOnAction(e -> viewManager.showRanking());
 
                 Button userBtn = UIComponents.createSmallButton("👤 Mi Perfil");
                 Button logoutBtn = UIComponents.createSmallButton("🚪 Salir");
@@ -57,7 +58,7 @@ public class MainMenuView {
                 userBtn.setOnAction(e -> viewManager.showProfile());
                 logoutBtn.setOnAction(e -> viewManager.showLoginScreen());
 
-                userActions.getChildren().addAll(welcomeText, rankingText, userBtn, logoutBtn);
+                userActions.getChildren().addAll(welcomeText, rankingBtn, userBtn, logoutBtn);
                 header.getChildren().addAll(appTitle, spacer, userActions);
 
                 mainLayout.setTop(header);
