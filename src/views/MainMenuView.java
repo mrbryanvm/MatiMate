@@ -47,13 +47,17 @@ public class MainMenuView {
                 welcomeText.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
                 welcomeText.setFill(AppConstants.TEXT_COLOR);
 
+                Text rankingText = new Text("🏆 Ranking: " + totalScore + " pts");
+                rankingText.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+                rankingText.setFill(AppConstants.BUTTON_COLOR);
+
                 Button userBtn = UIComponents.createSmallButton("👤 Mi Perfil");
                 Button logoutBtn = UIComponents.createSmallButton("🚪 Salir");
 
                 userBtn.setOnAction(e -> viewManager.showProfile());
                 logoutBtn.setOnAction(e -> viewManager.showLoginScreen());
 
-                userActions.getChildren().addAll(welcomeText, userBtn, logoutBtn);
+                userActions.getChildren().addAll(welcomeText, rankingText, userBtn, logoutBtn);
                 header.getChildren().addAll(appTitle, spacer, userActions);
 
                 mainLayout.setTop(header);

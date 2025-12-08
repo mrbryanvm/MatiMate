@@ -8,82 +8,26 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import utils.AppConstants;
+import utils.LimitsContentProvider;
+import utils.LimitsContext;
+import utils.LimitsContext.UserAnswer;
 import views.ViewManager;
 
 public class PracticeView {
     private ViewManager viewManager;
+    private LimitsFlowManager flowManager;
     private int currentExerciseIndex = 0;
     private int currentStepIndex = 0;
+    private String[][][] practiceData;
 
-    // Data structure: Exercise -> Steps -> {Question, Option1, Option2, Option3,
-    // Option4, CorrectIndex}
-    private final String[][][] practiceData = {
-            // Exercise 1
-            {
-                    {
-                            "Ejercicio 1: Calcular lim(x→1) (2x + 5)\nPaso 1: ¿Qué debemos hacer primero?",
-                            "Factorizar la expresión",
-                            "Sustituir x por 1 directamente",
-                            "Derivar la función",
-                            "Graficar la función",
-                            "1" // Correct: Sustituir
-                    },
-                    {
-                            "Paso 2: Al sustituir x=1, ¿qué expresión obtenemos?",
-                            "2(1) + 5",
-                            "2(0) + 5",
-                            "2 + 5x",
-                            "2(1) - 5",
-                            "0" // Correct: 2(1) + 5
-                    },
-                    {
-                            "Paso 3: ¿Cuál es el resultado final?",
-                            "6",
-                            "5",
-                            "7",
-                            "8",
-                            "2" // Correct: 7
-                    }
-            },
-            // Exercise 2
-            {
-                    {
-                            "Ejercicio 2: Calcular lim(x→2) (x² - 4)/(x - 2)\nPaso 1: Si evaluamos directamente, ¿qué obtenemos?",
-                            "4",
-                            "0",
-                            "0/0 (Indeterminación)",
-                            "Infinito",
-                            "2" // Correct: 0/0
-                    },
-                    {
-                            "Paso 2: ¿Cómo resolvemos la indeterminación?",
-                            "Factorizando el numerador como diferencia de cuadrados",
-                            "Multiplicando por el conjugado",
-                            "Elevando al cuadrado",
-                            "No se puede resolver",
-                            "0" // Correct: Factorizando
-                    },
-                    {
-                            "Paso 3: ¿Cómo queda la expresión factorizada?",
-                            "(x-2)(x-2)/(x-2)",
-                            "(x+2)(x-2)/(x-2)",
-                            "(x+2)(x+2)/(x-2)",
-                            "(x-4)(x+1)/(x-2)",
-                            "1" // Correct: (x+2)(x-2)/(x-2)
-                    },
-                    {
-                            "Paso 4: Al simplificar y evaluar el límite, ¿cuál es el resultado?",
-                            "0",
-                            "2",
-                            "4",
-                            "Infinito",
-                            "2" // Correct: 4
-                    }
-            }
-    };
+    // Track if current step was answered wrongly at least once (to show in stats as
+    // incorrect initially)
+    private boolean currentStepAnsweredWrongly = false;
 
     public PracticeView(ViewManager viewManager) {
         this.viewManager = viewManager;
+        this.flowManager = new LimitsFlowManager(viewManager);
+        this.practiceData = LimitsContentProvider.getPracticeSteps(LimitsContext.getInstance().getCurrentTopic());
     }
 
     public VBox createView() {
@@ -102,15 +46,15 @@ public class PracticeView {
         backButton.setOnAction(e -> {
             if (currentStepIndex > 0) {
                 currentStepIndex--;
+                currentStepAnsweredWrongly = false;
                 show();
             } else if (currentExerciseIndex > 0) {
                 currentExerciseIndex--;
                 currentStepIndex = practiceData[currentExerciseIndex].length - 1;
+                currentStepAnsweredWrongly = false;
                 show();
             } else {
-                ExerciseSeriesView exercisesView = new ExerciseSeriesView(viewManager);
-                viewManager.getRoot().getChildren().clear();
-                viewManager.getRoot().getChildren().add(exercisesView.createView());
+                flowManager.showExercises();
             }
         });
 
@@ -137,6 +81,13 @@ public class PracticeView {
         mainContent.setPadding(new Insets(40));
         mainContent.setAlignment(Pos.TOP_CENTER);
 
+        if (practiceData.length == 0) {
+            Label errorLabel = new Label("No hay ejercicios de práctica para este tema.");
+            mainContent.getChildren().add(errorLabel);
+            contentLayout.getChildren().addAll(header, mainContent);
+            return contentLayout;
+        }
+
         // Question Card
         VBox card = new VBox(20);
         card.setStyle("-fx-background-color: white; -fx-background-radius: 15; " +
@@ -147,11 +98,24 @@ public class PracticeView {
         String[] stepData = practiceData[currentExerciseIndex][currentStepIndex];
         String questionText = stepData[0];
         int correctIndex = Integer.parseInt(stepData[5]);
+        int pointsValue = Integer.parseInt(stepData[6]); // Explicit points
+
+        HBox titleBox = new HBox(10);
+        titleBox.setAlignment(Pos.CENTER_LEFT);
 
         Label qLabel = new Label(questionText);
         qLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
         qLabel.setWrapText(true);
         qLabel.setTextFill(AppConstants.TEXT_COLOR);
+        qLabel.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(qLabel, Priority.ALWAYS);
+
+        Label pointsLabel = new Label("(" + pointsValue + " pts)");
+        pointsLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+        pointsLabel.setTextFill(AppConstants.PRIMARY_COLOR);
+        pointsLabel.setMinWidth(Region.USE_PREF_SIZE);
+
+        titleBox.getChildren().addAll(qLabel, pointsLabel);
 
         VBox optionsBox = new VBox(15);
         ToggleGroup group = new ToggleGroup();
@@ -183,61 +147,61 @@ public class PracticeView {
             }
 
             int selectedIndex = (int) selected.getUserData();
+            String selectedText = ((RadioButton) selected).getText();
+            String correctText = stepData[correctIndex + 1];
+
             if (selectedIndex == correctIndex) {
-                // Correct
+                if (!currentStepAnsweredWrongly) {
+                    // Correct on first try
+                    LimitsContext.getInstance().addScore(pointsValue);
+                    LimitsContext.getInstance().addPracticeAnswer(
+                            new UserAnswer(questionText, selectedText, correctText, true, pointsValue));
+                } else {
+                    // Was wrong before, now correct.
+                    // IMPORTANT: We do NOT record a new "Correct" answer for stats if we already
+                    // recorded a wrong one.
+                }
+
                 if (currentStepIndex < practiceData[currentExerciseIndex].length - 1) {
                     currentStepIndex++;
+                    currentStepAnsweredWrongly = false; // Reset for next step
                     show();
                 } else if (currentExerciseIndex < practiceData.length - 1) {
                     currentExerciseIndex++;
                     currentStepIndex = 0;
+                    currentStepAnsweredWrongly = false;
                     show();
                 } else {
-                    // Finished all exercises
-                    showCompletionScreen(contentLayout);
+                    // Finished all exercises -> Statistics
+                    flowManager.showStatistics();
                 }
             } else {
-                feedbackLabel.setText("Respuesta incorrecta. Inténtalo de nuevo.");
+                // Incorrect
+                feedbackLabel.setText("Respuesta incorrecta (-1 pto). Inténtalo de nuevo.");
                 feedbackLabel.setTextFill(javafx.scene.paint.Color.RED);
+
+                if (!currentStepAnsweredWrongly) {
+                    // First wrong attempt: penalize and record
+                    LimitsContext.getInstance().penalize();
+                    LimitsContext.getInstance().addPracticeAnswer(
+                            new UserAnswer(questionText, selectedText, correctText, false, -1));
+                    currentStepAnsweredWrongly = true;
+                }
             }
         });
 
-        card.getChildren().addAll(qLabel, optionsBox, feedbackLabel, checkButton);
+        card.getChildren().addAll(titleBox, optionsBox, feedbackLabel, checkButton);
         mainContent.getChildren().add(card);
+
+        // Menu Button
+        Button menuButton = new Button("Volver al Menú");
+        menuButton.setStyle("-fx-background-color: #718096; -fx-text-fill: white; -fx-font-weight: bold; " +
+                "-fx-background-radius: 20; -fx-padding: 10 20;");
+        menuButton.setOnAction(e -> viewManager.showLimitesMenu());
+        mainContent.getChildren().add(menuButton);
 
         contentLayout.getChildren().addAll(header, mainContent);
         return contentLayout;
-    }
-
-    private void showCompletionScreen(VBox contentLayout) {
-        contentLayout.getChildren().clear();
-        contentLayout.setBackground(
-                new Background(new BackgroundFill(AppConstants.BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
-
-        VBox completionBox = new VBox(25);
-        completionBox.setAlignment(Pos.CENTER);
-        completionBox.setPadding(new Insets(50));
-
-        Text emoji = new Text("🏆");
-        emoji.setFont(Font.font(60));
-
-        Text title = new Text("¡Felicidades!");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 32));
-        title.setFill(AppConstants.TITLE_COLOR);
-
-        Text message = new Text("Has completado exitosamente toda la sección de Límite de una Función.");
-        message.setFont(Font.font("Segoe UI", 18));
-        message.setFill(AppConstants.TEXT_COLOR);
-        message.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-
-        Button menuButton = new Button("Volver al Menú Principal");
-        menuButton.setStyle("-fx-background-color: " + AppConstants.PRIMARY_COLOR_HEX + "; -fx-text-fill: white; " +
-                "-fx-font-weight: bold; -fx-background-radius: 25; -fx-padding: 15 40; -fx-font-size: 18; " +
-                "-fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);");
-        menuButton.setOnAction(e -> viewManager.showLimitesMenu());
-
-        completionBox.getChildren().addAll(emoji, title, message, menuButton);
-        contentLayout.getChildren().add(completionBox);
     }
 
     public void show() {

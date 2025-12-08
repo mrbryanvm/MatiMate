@@ -4,25 +4,33 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import utils.AppConstants;
+import utils.LimitsContentProvider;
+import utils.LimitsContext;
 import utils.YouTubePlayer;
 import views.ViewManager;
 
 public class VideoView {
     private ViewManager viewManager;
+    private LimitsFlowManager flowManager;
 
     public VideoView(ViewManager viewManager) {
         this.viewManager = viewManager;
+        this.flowManager = new LimitsFlowManager(viewManager);
     }
 
     public VBox createView() {
         VBox contentLayout = new VBox(0);
         contentLayout.setBackground(
                 new Background(new BackgroundFill(AppConstants.BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        String[] videoData = LimitsContentProvider.getVideoData(LimitsContext.getInstance().getCurrentTopic());
+        String videoUrl = videoData[0];
+        String videoTitle = videoData[1];
+        String videoSubtitle = videoData[2];
 
         // Header
         StackPane header = new StackPane();
@@ -32,11 +40,7 @@ public class VideoView {
         Button backButton = new Button("←");
         backButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #184093; -fx-font-size: 20; " +
                 "-fx-font-weight: bold; -fx-border-color: transparent; -fx-cursor: hand;");
-        backButton.setOnAction(e -> {
-            TheoryQuestionView questionView = new TheoryQuestionView(viewManager);
-            viewManager.getRoot().getChildren().clear();
-            viewManager.getRoot().getChildren().add(questionView.createView());
-        });
+        backButton.setOnAction(e -> flowManager.showTheoryQuestions());
 
         VBox headerContent = new VBox(3);
         headerContent.setAlignment(Pos.CENTER);
@@ -45,7 +49,7 @@ public class VideoView {
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
         title.setFill(AppConstants.TITLE_COLOR);
 
-        Text subtitle = new Text("Límite de una función");
+        Text subtitle = new Text(videoTitle);
         subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
         subtitle.setFill(AppConstants.TITLE_COLOR.deriveColor(1, 1, 1, 0.9));
 
@@ -61,56 +65,43 @@ public class VideoView {
         mainContent.setPadding(new Insets(40));
         mainContent.setAlignment(Pos.TOP_CENTER);
 
-        // Video Container
-        VBox videoContainer = new VBox(15);
-        videoContainer.setAlignment(Pos.CENTER);
-        videoContainer.setStyle("-fx-background-color: #2D3748; -fx-background-radius: 15; " +
-                "-fx-border-color: #00AEEF; -fx-border-width: 2; -fx-border-radius: 15; " +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);");
-        videoContainer.setPrefSize(600, 340);
-        videoContainer.setMaxWidth(600);
-        videoContainer.setPadding(new Insets(20));
+        // Video Card
+        VBox videoCard = new VBox(20);
+        videoCard.setAlignment(Pos.CENTER);
+        videoCard.setStyle("-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 40; " +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);");
+        videoCard.setMaxWidth(600);
 
-        Text playIcon = new Text("▶");
-        playIcon.setFont(Font.font("Segoe UI", FontWeight.BOLD, 60));
-        playIcon.setFill(Color.WHITE);
+        Label infoLabel = new Label(videoSubtitle);
+        infoLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 16));
+        infoLabel.setTextFill(AppConstants.TEXT_COLOR);
+        infoLabel.setWrapText(true);
+        infoLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
 
-        Label videoText = new Label("Haz clic para reproducir el video");
-        videoText.setFont(Font.font("Segoe UI", 18));
-        videoText.setTextFill(Color.WHITE);
+        Button playButton = new Button("▶ Reproducir Video en YouTube");
+        playButton.setStyle("-fx-background-color: #FF0000; -fx-text-fill: white; " +
+                "-fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 15 30; -fx-font-size: 16; " +
+                "-fx-cursor: hand;");
+        playButton.setOnAction(e -> YouTubePlayer.playVideo(videoUrl, videoTitle, videoSubtitle));
 
-        videoContainer.getChildren().addAll(playIcon, videoText);
-        videoContainer.setCursor(javafx.scene.Cursor.HAND);
+        videoCard.getChildren().addAll(infoLabel, playButton);
 
-        videoContainer.setOnMouseClicked(e -> {
-            YouTubePlayer.playVideo(
-                    "https://www.youtube.com/watch?v=qRuoOornRNY&t=22s",
-                    "Límite de una función",
-                    "Explicación completa del tema");
-        });
-
-        // Buttons
-        HBox buttonBox = new HBox(20);
-        buttonBox.setAlignment(Pos.CENTER);
-
-        Button menuButton = new Button("Volver al Menú");
-        menuButton.setStyle("-fx-background-color: #718096; -fx-text-fill: white; -fx-font-weight: bold; " +
-                "-fx-background-radius: 20; -fx-padding: 12 25; -fx-font-size: 14;");
-        menuButton.setOnAction(e -> viewManager.showLimitesMenu());
-
-        Button nextButton = new Button("Siguiente →");
+        // Next Button
+        Button nextButton = new Button("Siguiente");
         nextButton.setStyle("-fx-background-color: " + AppConstants.PRIMARY_COLOR_HEX + "; -fx-text-fill: white; " +
                 "-fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 12 30; -fx-font-size: 16; " +
-                "-fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);");
-        nextButton.setOnAction(e -> {
-            CuestionarioView quizView = new CuestionarioView(viewManager);
-            viewManager.getRoot().getChildren().clear();
-            viewManager.getRoot().getChildren().add(quizView.createView());
-        });
+                "-fx-cursor: hand;");
+        nextButton.setOnAction(e -> flowManager.showQuiz());
 
-        buttonBox.getChildren().addAll(menuButton, nextButton);
+        mainContent.getChildren().addAll(videoCard, nextButton);
 
-        mainContent.getChildren().addAll(videoContainer, buttonBox);
+        // Menu Button
+        Button menuButton = new Button("Volver al Menú");
+        menuButton.setStyle("-fx-background-color: #718096; -fx-text-fill: white; -fx-font-weight: bold; " +
+                "-fx-background-radius: 20; -fx-padding: 10 20;");
+        menuButton.setOnAction(e -> viewManager.showLimitesMenu());
+
+        mainContent.getChildren().add(menuButton);
 
         contentLayout.getChildren().addAll(header, mainContent);
         return contentLayout;

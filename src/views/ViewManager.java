@@ -42,6 +42,15 @@ public class ViewManager {
         profileView = new ProfileView(this, currentUser);
     }
 
+    public void updateUserScore(int addedPoints) {
+        if (currentUser != null) {
+            int newScore = currentUser.getScore() + addedPoints;
+            currentUser.setScore(newScore);
+            // Refresh main menu with new score
+            mainMenuView = new MainMenuView(this, currentUser.getNombre(), newScore);
+        }
+    }
+
     public User getCurrentUser() {
         return currentUser;
     }
@@ -63,6 +72,11 @@ public class ViewManager {
     public void showMainMenu() {
         root.getChildren().clear();
         root.getChildren().add(mainMenuView.createView());
+    }
+
+    public void updateView(javafx.scene.layout.Pane view) {
+        root.getChildren().clear();
+        root.getChildren().add(view);
     }
 
     public void showLimitesMenu() {

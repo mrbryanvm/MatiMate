@@ -59,6 +59,10 @@ public class LimitesMenuView {
 
             if (topic.equals("📚 Límite de una función")) {
                 topicItem.setOnMouseClicked(e -> {
+                    // Start flow cleanly: Reset Context and set topic to DEFINICION
+                    utils.LimitsContext.getInstance().reset();
+                    utils.LimitsContext.getInstance().startTopic(utils.LimitsContext.Topic.DEFINICION);
+
                     LimiteFuncionView limiteView = new LimiteFuncionView(viewManager);
                     viewManager.getRoot().getChildren().clear();
                     viewManager.getRoot().getChildren().add(limiteView.createView());

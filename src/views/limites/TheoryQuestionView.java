@@ -8,56 +8,23 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import utils.AppConstants;
+import utils.LimitsContentProvider;
+import utils.LimitsContext;
 import views.ViewManager;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TheoryQuestionView {
     private ViewManager viewManager;
+    private LimitsFlowManager flowManager;
     private int currentQuestionIndex = 0;
+    private String[][] questions;
 
-    // Questions data: {Question, Option1, Option2, Option3,
-    // CorrectOptionIndex(0-based)}
-    private final String[][] questions = {
-            {
-                    "¿Qué representa el límite L de una función f(x) cuando x tiende a 'a'?",
-                    "El valor exacto de f(a)",
-                    "El valor al que se acercan las imágenes f(x) cuando x se acerca a 'a'",
-                    "El valor de x cuando f(x) es 0",
-                    "1" // Correct is Option 2 (index 1)
-            },
-            {
-                    "Para que exista el límite de una función en un punto p, ¿qué debe ocurrir con los límites laterales?",
-                    "Deben ser diferentes",
-                    "Uno debe ser infinito",
-                    "Deben ser iguales",
-                    "2" // Correct is Option 3 (index 2)
-            },
-            {
-                    "¿Cuál es el límite de una constante k cuando x tiende a cualquier valor?",
-                    "La misma constante k",
-                    "Cero",
-                    "Infinito",
-                    "0" // Correct is Option 1 (index 0)
-            },
-            {
-                    "Según las propiedades, el límite de una suma de funciones es igual a:",
-                    "El producto de sus límites",
-                    "La suma de sus límites",
-                    "La diferencia de sus límites",
-                    "1" // Correct is Option 2 (index 1)
-            },
-            {
-                    "Si lim(x→p⁻) f(x) ≠ lim(x→p⁺) f(x), entonces:",
-                    "El límite existe y es cero",
-                    "El límite existe y es infinito",
-                    "El límite no existe",
-                    "2" // Correct is Option 3 (index 2)
-            }
-    };
+    // Track if the current question has been attempted incorrectly at least once
+    private boolean answeredWronglyOnce = false;
 
     public TheoryQuestionView(ViewManager viewManager) {
         this.viewManager = viewManager;
+        this.flowManager = new LimitsFlowManager(viewManager);
+        this.questions = LimitsContentProvider.getTheoryQuestions(LimitsContext.getInstance().getCurrentTopic());
     }
 
     public VBox createView() {
@@ -76,10 +43,10 @@ public class TheoryQuestionView {
         backButton.setOnAction(e -> {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
+                answeredWronglyOnce = false;
                 show();
             } else {
-                LimiteFuncionView theoryView = new LimiteFuncionView(viewManager);
-                theoryView.show();
+                flowManager.showTheory();
             }
         });
 
@@ -113,71 +80,95 @@ public class TheoryQuestionView {
         card.setPadding(new Insets(30));
         card.setMaxWidth(600);
 
-        String[] qData = questions[currentQuestionIndex];
-        String questionText = qData[0];
-        int correctIndex = Integer.parseInt(qData[4]);
+        if (questions.length == 0) {
+            Label errorLabel = new Label("No hay preguntas para este tema.");
+            card.getChildren().add(errorLabel);
+        } else {
+            String[] qData = questions[currentQuestionIndex];
+            String questionText = qData[0];
+            int correctIndex = Integer.parseInt(qData[4]);
+            int pointsValue = Integer.parseInt(qData[5]); // Get explicit points
 
-        Label qLabel = new Label(questionText);
-        qLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-        qLabel.setWrapText(true);
-        qLabel.setTextFill(AppConstants.TEXT_COLOR);
+            HBox titleBox = new HBox(10);
+            titleBox.setAlignment(Pos.CENTER_LEFT);
 
-        VBox optionsBox = new VBox(15);
-        ToggleGroup group = new ToggleGroup();
+            Label qLabel = new Label(questionText);
+            qLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
+            qLabel.setWrapText(true);
+            qLabel.setTextFill(AppConstants.TEXT_COLOR);
+            qLabel.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(qLabel, Priority.ALWAYS);
 
-        for (int i = 1; i <= 3; i++) {
-            RadioButton rb = new RadioButton(qData[i]);
-            rb.setToggleGroup(group);
-            rb.setFont(Font.font("Segoe UI", 16));
-            rb.setTextFill(AppConstants.TEXT_COLOR);
-            rb.setWrapText(true);
-            rb.setUserData(i - 1); // Store index 0, 1, 2
-            optionsBox.getChildren().add(rb);
-        }
+            Label pointsLabel = new Label("(" + pointsValue + " pts)");
+            pointsLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+            pointsLabel.setTextFill(AppConstants.PRIMARY_COLOR);
+            pointsLabel.setMinWidth(Region.USE_PREF_SIZE); // Prevent truncation
 
-        Label feedbackLabel = new Label("");
-        feedbackLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+            titleBox.getChildren().addAll(qLabel, pointsLabel);
 
-        Button checkButton = new Button("Siguiente");
-        checkButton.setStyle("-fx-background-color: " + AppConstants.PRIMARY_COLOR_HEX + "; -fx-text-fill: white; " +
-                "-fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 12 30; -fx-font-size: 16; " +
-                "-fx-cursor: hand;");
+            VBox optionsBox = new VBox(15);
+            ToggleGroup group = new ToggleGroup();
 
-        checkButton.setOnAction(e -> {
-            RadioButton selected = (RadioButton) group.getSelectedToggle();
-            if (selected == null) {
-                feedbackLabel.setText("Por favor selecciona una opción.");
-                feedbackLabel.setTextFill(javafx.scene.paint.Color.RED);
-                return;
+            for (int i = 1; i <= 3; i++) {
+                RadioButton rb = new RadioButton(qData[i]);
+                rb.setToggleGroup(group);
+                rb.setFont(Font.font("Segoe UI", 16));
+                rb.setTextFill(AppConstants.TEXT_COLOR);
+                rb.setWrapText(true);
+                rb.setUserData(i - 1); // Store index 0, 1, 2
+                optionsBox.getChildren().add(rb);
             }
 
-            int selectedIndex = (int) selected.getUserData();
-            if (selectedIndex == correctIndex) {
-                // Correct
-                if (currentQuestionIndex < questions.length - 1) {
-                    currentQuestionIndex++;
-                    show();
-                } else {
-                    // Go to Video View
-                    VideoView videoView = new VideoView(viewManager);
-                    viewManager.getRoot().getChildren().clear();
-                    viewManager.getRoot().getChildren().add(videoView.createView());
+            Label feedbackLabel = new Label("");
+            feedbackLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
+
+            Button checkButton = new Button("Siguiente");
+            checkButton.setStyle("-fx-background-color: " + AppConstants.PRIMARY_COLOR_HEX + "; -fx-text-fill: white; "
+                    +
+                    "-fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 12 30; -fx-font-size: 16; " +
+                    "-fx-cursor: hand;");
+
+            checkButton.setOnAction(e -> {
+                RadioButton selected = (RadioButton) group.getSelectedToggle();
+                if (selected == null) {
+                    feedbackLabel.setText("Por favor selecciona una opción.");
+                    feedbackLabel.setTextFill(javafx.scene.paint.Color.RED);
+                    return;
                 }
-            } else {
-                feedbackLabel.setText("Respuesta incorrecta. Inténtalo de nuevo.");
-                feedbackLabel.setTextFill(javafx.scene.paint.Color.RED);
-            }
-        });
 
-        card.getChildren().addAll(qLabel, optionsBox, feedbackLabel, checkButton);
+                int selectedIndex = (int) selected.getUserData();
+                if (selectedIndex == correctIndex) {
+                    // Only add points if never answered wrongly
+                    if (!answeredWronglyOnce) {
+                        LimitsContext.getInstance().addScore(pointsValue);
+                    }
+
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                        answeredWronglyOnce = false; // Reset for next question
+                        show();
+                    } else {
+                        flowManager.showVideo();
+                    }
+                } else {
+                    if (!answeredWronglyOnce) {
+                        LimitsContext.getInstance().penalize();
+                        answeredWronglyOnce = true;
+                    }
+                    feedbackLabel.setText("Respuesta incorrecta (-1 pto). Inténtalo de nuevo.");
+                    feedbackLabel.setTextFill(javafx.scene.paint.Color.RED);
+                }
+            });
+
+            card.getChildren().addAll(titleBox, optionsBox, feedbackLabel, checkButton);
+        }
         mainContent.getChildren().add(card);
 
         // Menu Button
         Button menuButton = new Button("Volver al Menú");
         menuButton.setStyle("-fx-background-color: #718096; -fx-text-fill: white; -fx-font-weight: bold; " +
                 "-fx-background-radius: 20; -fx-padding: 10 20;");
-        menuButton.setOnAction(e -> viewManager.showLimitesMenu()); // Actually this should probably go to main menu or
-                                                                    // limits menu? User said "volver al menú".
+        menuButton.setOnAction(e -> viewManager.showLimitesMenu());
 
         mainContent.getChildren().add(menuButton);
 
