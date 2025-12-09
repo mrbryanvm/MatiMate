@@ -67,9 +67,16 @@ public class LimitsFlowManager {
     }
 
     private void finishFlow() {
-        // Guardar puntuación en el usuario global
         int finalContextScore = LimitsContext.getInstance().getCurrentScore();
-        viewManager.updateUserScore(finalContextScore);
-        viewManager.showMainMenu();
+        int currentBest = viewManager.getCurrentUser().getScore();
+
+        FlowCompletionView completenessView = new FlowCompletionView(viewManager, finalContextScore, currentBest,
+                () -> {
+                    // Guardar puntuación en el usuario global
+                    viewManager.updateUserScore(finalContextScore);
+                    viewManager.showMainMenu();
+                });
+
+        viewManager.updateView(completenessView.createView());
     }
 }
