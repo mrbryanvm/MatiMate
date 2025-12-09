@@ -86,16 +86,13 @@ public class MainMenuView {
                                 "Reglas de derivación y aplicaciones");
                 Button integralesBtn = UIComponents.createContentCard("∫", "Integrales",
                                 "Integrales indefinidas y definidas");
-                Button practicaBtn = UIComponents.createContentCard("🎯", "Práctica",
-                                "Ejercicios mixtos para ponerte a prueba");
 
                 funcionesBtn.setOnAction(e -> viewManager.showFuncionesMenu());
                 limitesBtn.setOnAction(e -> viewManager.showLimitesMenu());
                 derivadasBtn.setOnAction(e -> viewManager.showDerivadasMenu());
                 integralesBtn.setOnAction(e -> viewManager.showIntegralesMenu());
-                practicaBtn.setOnAction(e -> viewManager.showComingSoon("Práctica"));
 
-                cardsContainer.getChildren().addAll(funcionesBtn, limitesBtn, derivadasBtn, integralesBtn, practicaBtn);
+                cardsContainer.getChildren().addAll(funcionesBtn, limitesBtn, derivadasBtn, integralesBtn);
 
                 contentContainer.getChildren().addAll(menuTitle, cardsContainer);
 

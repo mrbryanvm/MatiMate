@@ -50,8 +50,7 @@ public class LimitesMenuView {
                 "🔍 Continuidad en un punto",
                 "🧮 Cálculo de límites",
                 "∞ Límites al infinito",
-                "⭐ Límites notables",
-                "🎯 Evaluación"
+                "⭐ Límites notables"
         };
 
         for (String topic : topics) {
@@ -90,12 +89,6 @@ public class LimitesMenuView {
                     LimitesNotablesView notablesView = new LimitesNotablesView(viewManager, this);
                     viewManager.getRoot().getChildren().clear();
                     viewManager.getRoot().getChildren().add(notablesView.createView());
-                });
-            } else if (topic.equals("🎯 Evaluación")) {
-                topicItem.setOnMouseClicked(e -> {
-                    IntroduccionView introView = new IntroduccionView(viewManager);
-                    viewManager.getRoot().getChildren().clear();
-                    viewManager.getRoot().getChildren().add(introView.createView());
                 });
             }
             topicsBox.getChildren().add(topicItem);

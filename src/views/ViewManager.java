@@ -42,14 +42,18 @@ public class ViewManager {
         profileView = new ProfileView(this, currentUser);
     }
 
-    public void updateUserScore(int addedPoints) {
+    public void updateUserScore(int newRunScore) {
         if (currentUser != null) {
-            int newScore = currentUser.getScore() + addedPoints;
-            currentUser.setScore(newScore);
-            // PERSISTE PUNTAJE
-            userManager.updateUser(currentUser);
-            // Refresh main menu with new score
-            mainMenuView = new MainMenuView(this, currentUser.getNombre(), newScore);
+            // Logic: Update only if the new run score is higher than the current best score
+            if (newRunScore > currentUser.getScore()) {
+                currentUser.setScore(newRunScore);
+                // PERSISTE PUNTAJE
+                userManager.updateUser(currentUser);
+                // Refresh main menu with new score
+                mainMenuView = new MainMenuView(this, currentUser.getNombre(), newRunScore);
+            }
+            // If not higher, do not save or update main menu, keeping the previous high
+            // score.
         }
     }
 
