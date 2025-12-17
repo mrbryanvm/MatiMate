@@ -48,7 +48,7 @@ public class RegisterView {
 
         brandingBox.getChildren().addAll(titleText, subtitle);
 
-        // Right Side - Register Form
+        // Formulario de registro
         VBox formContainer = new VBox(20);
         formContainer.setAlignment(Pos.CENTER);
         formContainer.setPrefWidth(500);

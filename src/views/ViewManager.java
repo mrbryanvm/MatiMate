@@ -44,7 +44,8 @@ public class ViewManager {
 
     public void updateUserScore(int newRunScore) {
         if (currentUser != null) {
-            // Logic: Update only if the new run score is higher than the current best score
+            // Lógica: Actualizar solo si el nuevo puntaje es mayor que el mejor puntaje
+            // actual
             if (newRunScore > currentUser.getScore()) {
                 currentUser.setScore(newRunScore);
                 // PERSISTE PUNTAJE
@@ -52,8 +53,8 @@ public class ViewManager {
                 // Refresh main menu with new score
                 mainMenuView = new MainMenuView(this, currentUser.getNombre(), newRunScore);
             }
-            // If not higher, do not save or update main menu, keeping the previous high
-            // score.
+            // Si no es mayor, no se guarda ni se actualiza el menú principal, manteniendo
+            // el puntaje más alto anterior.
         }
     }
 
