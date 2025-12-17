@@ -1,7 +1,10 @@
 package utils;
 
 import java.util.ArrayList;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LimitsContext {
     private static LimitsContext instance;
@@ -30,12 +33,18 @@ public class LimitsContext {
 
     private Topic currentTopic;
     private int currentScore;
+
     private List<UserAnswer> currentPracticeAnswers;
+    private Set<Integer> answeredCorrectlyIndices;
+    private Set<Integer> penaltyAppliedIndices;
 
     private LimitsContext() {
         this.currentTopic = Topic.DEFINICION;
         this.currentScore = 0;
+
         this.currentPracticeAnswers = new ArrayList<>();
+        this.answeredCorrectlyIndices = new HashSet<>();
+        this.penaltyAppliedIndices = new HashSet<>();
     }
 
     public static LimitsContext getInstance() {
@@ -48,12 +57,18 @@ public class LimitsContext {
     public void reset() {
         this.currentTopic = Topic.DEFINICION;
         this.currentScore = 0;
+
         this.currentPracticeAnswers.clear();
+        this.answeredCorrectlyIndices.clear();
+        this.penaltyAppliedIndices.clear();
     }
 
     public void startTopic(Topic topic) {
         this.currentTopic = topic;
+
         this.currentPracticeAnswers.clear();
+        this.answeredCorrectlyIndices.clear();
+        this.penaltyAppliedIndices.clear();
     }
 
     public Topic getCurrentTopic() {
@@ -82,5 +97,21 @@ public class LimitsContext {
 
     public List<UserAnswer> getCurrentPracticeAnswers() {
         return new ArrayList<>(currentPracticeAnswers);
+    }
+
+    public boolean hasAnsweredCorrectly(int questionIndex) {
+        return answeredCorrectlyIndices.contains(questionIndex);
+    }
+
+    public void markAnsweredCorrectly(int questionIndex) {
+        answeredCorrectlyIndices.add(questionIndex);
+    }
+
+    public boolean hasPenaltyApplied(int questionIndex) {
+        return penaltyAppliedIndices.contains(questionIndex);
+    }
+
+    public void markPenaltyApplied(int questionIndex) {
+        penaltyAppliedIndices.add(questionIndex);
     }
 }

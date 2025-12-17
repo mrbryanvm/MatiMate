@@ -18,10 +18,6 @@ public class CuestionarioView {
     private int currentQuestionIndex = 0;
     private String[][] questions;
 
-    // Seguimiento si la pregunta actual fue respondida incorrectamente al menos una
-    // vez
-    private boolean answeredWronglyOnce = false;
-
     public CuestionarioView(ViewManager viewManager) {
         this.viewManager = viewManager;
         this.flowManager = new LimitsFlowManager(viewManager);
@@ -44,7 +40,6 @@ public class CuestionarioView {
         backButton.setOnAction(e -> {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
-                answeredWronglyOnce = false;
                 show();
             } else {
                 flowManager.showVideo();
@@ -139,22 +134,22 @@ public class CuestionarioView {
 
                 int selectedIndex = (int) selected.getUserData();
                 if (selectedIndex == correctIndex) {
-                    // Solo agregra puntos si no se respondio mal
-                    if (!answeredWronglyOnce) {
+                    // Check centralized state
+                    if (!LimitsContext.getInstance().hasAnsweredCorrectly(currentQuestionIndex)) {
                         LimitsContext.getInstance().addScore(pointsValue);
+                        LimitsContext.getInstance().markAnsweredCorrectly(currentQuestionIndex);
                     }
 
                     if (currentQuestionIndex < questions.length - 1) {
                         currentQuestionIndex++;
-                        answeredWronglyOnce = false; // Reset
                         show();
                     } else {
                         flowManager.showExercises();
                     }
                 } else {
-                    if (!answeredWronglyOnce) {
+                    if (!LimitsContext.getInstance().hasPenaltyApplied(currentQuestionIndex)) {
                         LimitsContext.getInstance().penalize();
-                        answeredWronglyOnce = true;
+                        LimitsContext.getInstance().markPenaltyApplied(currentQuestionIndex);
                     }
                     feedbackLabel.setText("Respuesta incorrecta (-1 pto). Inténtalo de nuevo.");
                     feedbackLabel.setTextFill(javafx.scene.paint.Color.RED);
