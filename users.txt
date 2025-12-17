@@ -1,4 +1,4 @@
-edman|edman|Edman|77654321|0
+edman|edman|Edman|77654321|122
 admin|admin|Administrador|77654321|1
 maria|maria|Maria|77654321|15
 mery|mery|Mery|77654321|80

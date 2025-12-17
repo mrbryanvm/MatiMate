@@ -12,7 +12,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import utils.AppConstants;
 import utils.UIComponents;
-import utils.HelpDialog;
 
 public class LoginView {
     private ViewManager viewManager;
@@ -118,24 +117,14 @@ public class LoginView {
         HBox linksBox = new HBox(20);
         linksBox.setAlignment(Pos.CENTER);
 
-        Hyperlink forgotLink = new Hyperlink("¿Olvidaste tu contraseña?");
-        forgotLink.setStyle(
-                "-fx-text-fill: #666666; -fx-font-size: 14; -fx-border-color: transparent; -fx-underline: false;");
-
         Hyperlink registerLink = new Hyperlink("Crear cuenta nueva");
         registerLink.setStyle("-fx-text-fill: " + AppConstants.PRIMARY_COLOR_HEX
                 + "; -fx-font-size: 14; -fx-border-color: transparent; -fx-underline: false; -fx-font-weight: bold;");
         registerLink.setOnAction(e -> viewManager.showRegisterScreen());
 
-        linksBox.getChildren().addAll(forgotLink, registerLink);
+        linksBox.getChildren().addAll(registerLink);
 
-        // Botón de ayuda para ver usuarios de prueba
-        Button helpBtn = new Button("❓ Ver usuarios de prueba");
-        helpBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #999999; " +
-                "-fx-font-size: 12; -fx-underline: true; -fx-border-color: transparent;");
-        helpBtn.setOnAction(e -> HelpDialog.showUsersHelp(viewManager.getPrimaryStage()));
-
-        formBox.getChildren().addAll(emailBox, passwordBox, errorLabel, loginBtn, linksBox, helpBtn);
+        formBox.getChildren().addAll(emailBox, passwordBox, errorLabel, loginBtn, linksBox);
         formContainer.getChildren().addAll(loginTitle, formBox);
 
         mainLayout.getChildren().addAll(brandingBox, formContainer);
